@@ -9,6 +9,8 @@ import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import OneMilkLogo from "@/components/OneMilkLogo";
+import { IndianRupee } from "lucide-react";
 
 const Subscription = () => {
   const [plan, setPlan] = useState("basic");
@@ -19,17 +21,17 @@ const Subscription = () => {
   const plans = {
     basic: {
       name: "Basic",
-      price: frequency === "weekly" ? 29 : frequency === "biweekly" ? 55 : 105,
+      price: frequency === "weekly" ? 2199 : frequency === "biweekly" ? 4099 : 7899,
       description: "1 liter of milk every 2 days"
     },
     family: {
       name: "Family",
-      price: frequency === "weekly" ? 49 : frequency === "biweekly" ? 90 : 175,
+      price: frequency === "weekly" ? 3699 : frequency === "biweekly" ? 6799 : 13199,
       description: "2 liters of milk daily"
     },
     premium: {
       name: "Premium",
-      price: frequency === "weekly" ? 79 : frequency === "biweekly" ? 150 : 285,
+      price: frequency === "weekly" ? 5999 : frequency === "biweekly" ? 11299 : 21499,
       description: "3 liters of milk daily with premium varieties"
     }
   };
@@ -57,11 +59,21 @@ const Subscription = () => {
     }
   };
 
+  // Format price in INR
+  const formatPrice = (price: number) => {
+    return (
+      <div className="flex items-center">
+        <IndianRupee className="h-3.5 w-3.5 mr-1" />
+        <span>{price.toFixed(2)}</span>
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="container mx-auto py-6 px-4">
         <div className="flex justify-between items-center">
-          <div className="text-2xl font-bold text-purple-800">MilkSub</div>
+          <OneMilkLogo />
           <nav className="flex space-x-4">
             <Button variant="ghost" asChild>
               <Link to="/">Home</Link>
@@ -95,7 +107,9 @@ const Subscription = () => {
                     <div className="font-semibold">Basic Plan</div>
                     <div className="text-sm text-gray-500">1 liter of milk every 2 days</div>
                   </Label>
-                  <div className="font-semibold">${frequency === "weekly" ? 29 : frequency === "biweekly" ? 55 : 105}</div>
+                  <div className="font-semibold flex items-center">
+                    {formatPrice(frequency === "weekly" ? 2199 : frequency === "biweekly" ? 4099 : 7899)}
+                  </div>
                 </div>
 
                 <div className="flex items-center space-x-4 rounded-lg border p-4 cursor-pointer hover:bg-gray-50">
@@ -104,7 +118,9 @@ const Subscription = () => {
                     <div className="font-semibold">Family Plan</div>
                     <div className="text-sm text-gray-500">2 liters of milk daily</div>
                   </Label>
-                  <div className="font-semibold">${frequency === "weekly" ? 49 : frequency === "biweekly" ? 90 : 175}</div>
+                  <div className="font-semibold flex items-center">
+                    {formatPrice(frequency === "weekly" ? 3699 : frequency === "biweekly" ? 6799 : 13199)}
+                  </div>
                 </div>
 
                 <div className="flex items-center space-x-4 rounded-lg border p-4 cursor-pointer hover:bg-gray-50">
@@ -113,7 +129,9 @@ const Subscription = () => {
                     <div className="font-semibold">Premium Plan</div>
                     <div className="text-sm text-gray-500">3 liters of milk daily with premium varieties</div>
                   </Label>
-                  <div className="font-semibold">${frequency === "weekly" ? 79 : frequency === "biweekly" ? 150 : 285}</div>
+                  <div className="font-semibold flex items-center">
+                    {formatPrice(frequency === "weekly" ? 5999 : frequency === "biweekly" ? 11299 : 21499)}
+                  </div>
                 </div>
               </RadioGroup>
             </CardContent>
@@ -178,16 +196,16 @@ const Subscription = () => {
                 </div>
                 <div className="space-y-2 col-span-1">
                   <Label htmlFor="state">State</Label>
-                  <Input id="state" placeholder="CA" />
+                  <Input id="state" placeholder="Maharashtra" />
                 </div>
                 <div className="space-y-2 col-span-1">
-                  <Label htmlFor="zip">ZIP Code</Label>
-                  <Input id="zip" placeholder="12345" />
+                  <Label htmlFor="zip">PIN Code</Label>
+                  <Input id="zip" placeholder="400001" />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="phone">Phone Number</Label>
-                <Input id="phone" placeholder="(555) 123-4567" />
+                <Input id="phone" placeholder="+91 98765 43210" />
               </div>
             </CardContent>
           </Card>
@@ -215,7 +233,9 @@ const Subscription = () => {
             <CardContent className="space-y-4">
               <div className="flex justify-between">
                 <span>{plans[plan as keyof typeof plans].name} Plan ({frequency})</span>
-                <span>${plans[plan as keyof typeof plans].price.toFixed(2)}</span>
+                <div className="flex items-center">
+                  {formatPrice(plans[plan as keyof typeof plans].price)}
+                </div>
               </div>
               <div className="flex justify-between">
                 <span>Delivery Fee</span>
@@ -224,7 +244,9 @@ const Subscription = () => {
               <Separator />
               <div className="flex justify-between font-bold">
                 <span>Total</span>
-                <span>${plans[plan as keyof typeof plans].price.toFixed(2)}</span>
+                <div className="flex items-center">
+                  {formatPrice(plans[plan as keyof typeof plans].price)}
+                </div>
               </div>
             </CardContent>
             <CardFooter>
@@ -243,7 +265,7 @@ const Subscription = () => {
                     <div className="space-y-2">
                       <h4 className="font-medium">Subscription Details:</h4>
                       <p>{plans[plan as keyof typeof plans].description}</p>
-                      <p>Price: ${plans[plan as keyof typeof plans].price.toFixed(2)} ({frequency})</p>
+                      <p className="flex items-center">Price: {formatPrice(plans[plan as keyof typeof plans].price)} ({frequency})</p>
                     </div>
                     <div className="space-y-2">
                       <h4 className="font-medium">By subscribing, you agree to:</h4>
@@ -269,7 +291,9 @@ const Subscription = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-xl font-bold mb-4">MilkSub</h3>
+              <h3 className="text-xl font-bold mb-4">
+                <OneMilkLogo className="text-white" />
+              </h3>
               <p className="text-gray-400">Fresh milk delivered to your doorstep.</p>
             </div>
             <div>
@@ -284,8 +308,8 @@ const Subscription = () => {
             <div>
               <h4 className="text-lg font-semibold mb-4">Contact</h4>
               <ul className="space-y-2 text-gray-400">
-                <li>Email: info@milksub.com</li>
-                <li>Phone: +1 (555) 123-4567</li>
+                <li>Email: info@onemilk.com</li>
+                <li>Phone: +91 9876543210</li>
                 <li>Address: 123 Dairy Lane, Milk City</li>
               </ul>
             </div>
@@ -302,7 +326,7 @@ const Subscription = () => {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; {new Date().getFullYear()} MilkSub. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} OneMilk. All rights reserved.</p>
           </div>
         </div>
       </footer>
