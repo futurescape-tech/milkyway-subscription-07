@@ -86,11 +86,11 @@ const Index = () => {
               Subscribe to our premium milk delivery service and never run out of fresh milk again.
             </p>
             <div className="flex space-x-4">
-              <Button size="lg" onClick={handleExploreClick}>
-                Explore Plans
+              <Button size="lg" asChild>
+                <Link to="/subscription" onClick={handleExploreClick}>Explore Plans</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link to="/how-it-works">How It Works</Link>
+                <Link to="/products">Browse Products</Link>
               </Button>
             </div>
           </div>
@@ -174,7 +174,9 @@ const Index = () => {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button className="w-full">Subscribe Now</Button>
+                <Button className="w-full" asChild>
+                  <Link to="/subscription">Subscribe Now</Link>
+                </Button>
               </CardFooter>
             </Card>
 
@@ -217,7 +219,9 @@ const Index = () => {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button className="w-full bg-red-600 hover:bg-red-700">Subscribe Now</Button>
+                <Button className="w-full bg-red-600 hover:bg-red-700" asChild>
+                  <Link to="/subscription">Subscribe Now</Link>
+                </Button>
               </CardFooter>
             </Card>
 
@@ -266,7 +270,9 @@ const Index = () => {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button className="w-full">Subscribe Now</Button>
+                <Button className="w-full" asChild>
+                  <Link to="/subscription">Subscribe Now</Link>
+                </Button>
               </CardFooter>
             </Card>
           </div>

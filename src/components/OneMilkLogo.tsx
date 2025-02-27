@@ -10,12 +10,10 @@ const OneMilkLogo: React.FC<LogoProps> = ({ className = "", withText = true }) =
   return (
     <div className={`flex items-center ${className}`}>
       <div className="relative">
-        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M18 4.5C18 4.5 16 7.5 9 7.5C6.5 7.5 4.5 6.5 4.5 6.5V24C4.5 24 6.5 31.5 18 31.5C29.5 31.5 31.5 24 31.5 24V6.5C31.5 6.5 29.5 7.5 27 7.5C20 7.5 18 4.5 18 4.5Z" stroke="#E11D48" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M13.5 16.5V24" stroke="#E11D48" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M22.5 16.5V24" stroke="#E11D48" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M9 12L9 24" stroke="#E11D48" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M27 12L27 24" stroke="#E11D48" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13 8.10551C10.3085 4.58707 2 7.49472 2 13.5981C2 16.3849 4.33579 19 8 19C11.6642 19 14 16.3849 14 13.5981V8.10551L13 8.10551Z" stroke="#E11D48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M13 5V3.53932C13 2.86794 12.5224 2.28661 11.8684 2.13429V2.13429C10.9317 1.91482 10 2.61049 10 3.57293V6" stroke="#E11D48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M10 6H13" stroke="#E11D48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </div>
       {withText && (
