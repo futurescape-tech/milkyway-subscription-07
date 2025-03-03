@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -63,10 +62,11 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				onemilk: {
-					purple: '#754693',
-					orange: '#F4893F',
-					yellow: '#FFCB30',
+				startwell: {
+					purple: '#673AB7',
+					yellow: '#FFCA28',
+					orange: '#FF9800',
+					lavender: '#E1D4F3',
 				}
 			},
 			borderRadius: {

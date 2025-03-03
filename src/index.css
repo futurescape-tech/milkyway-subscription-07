@@ -5,83 +5,83 @@
 
 @layer base {
   :root {
-    --background: 210 50% 98%;
-    --foreground: 210 50% 10%;
+    --background: 260 25% 97%;
+    --foreground: 260 25% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 210 50% 10%;
+    --card-foreground: 260 25% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 210 50% 10%;
+    --popover-foreground: 260 25% 10%;
 
-    --primary: 281 37% 42%;
+    --primary: 260 60% 47%; /* Purple */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 145 50% 90%;
-    --secondary-foreground: 145 50% 30%;
+    --secondary: 43 100% 58%; /* Yellow */
+    --secondary-foreground: 260 60% 47%;
 
-    --muted: 210 10% 96%;
-    --muted-foreground: 210 10% 45%;
+    --muted: 260 10% 96%;
+    --muted-foreground: 260 10% 45%;
 
-    --accent: 145 50% 90%;
-    --accent-foreground: 145 50% 30%;
+    --accent: 33 100% 50%; /* Orange */
+    --accent-foreground: 260 60% 47%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 10% 90%;
-    --input: 210 10% 90%;
-    --ring: 281 37% 42%;
+    --border: 260 10% 90%;
+    --input: 260 10% 90%;
+    --ring: 260 60% 47%;
 
     --radius: 0.8rem;
 
-    --sidebar-background: 210 50% 98%;
-    --sidebar-foreground: 210 50% 10%;
-    --sidebar-primary: 281 37% 42%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 145 50% 90%;
-    --sidebar-accent-foreground: 145 50% 30%;
-    --sidebar-border: 210 10% 90%;
-    --sidebar-ring: 281 37% 42%;
+    --sidebar-background: 260 60% 47%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 43 100% 58%;
+    --sidebar-primary-foreground: 260 60% 47%;
+    --sidebar-accent: 33 100% 50%;
+    --sidebar-accent-foreground: 260 60% 47%;
+    --sidebar-border: 260 40% 60%;
+    --sidebar-ring: 43 100% 58%;
   }
 
   .dark {
-    --background: 210 50% 10%;
-    --foreground: 210 50% 98%;
+    --background: 260 30% 10%;
+    --foreground: 260 25% 98%;
 
-    --card: 210 50% 12%;
-    --card-foreground: 210 50% 98%;
+    --card: 260 30% 12%;
+    --card-foreground: 260 25% 98%;
 
-    --popover: 210 50% 12%;
-    --popover-foreground: 210 50% 98%;
+    --popover: 260 30% 12%;
+    --popover-foreground: 260 25% 98%;
 
-    --primary: 281 37% 42%;
+    --primary: 260 60% 47%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 145 50% 30%;
-    --secondary-foreground: 145 50% 90%;
+    --secondary: 43 100% 58%;
+    --secondary-foreground: 260 60% 47%;
 
-    --muted: 210 40% 16%;
-    --muted-foreground: 210 40% 65%;
+    --muted: 260 40% 16%;
+    --muted-foreground: 260 40% 65%;
 
-    --accent: 145 50% 30%;
-    --accent-foreground: 145 50% 90%;
+    --accent: 33 100% 50%;
+    --accent-foreground: 260 60% 47%;
 
     --destructive: 0 62% 30%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 210 40% 20%;
-    --input: 210 40% 20%;
-    --ring: 281 37% 42%;
+    --border: 260 40% 20%;
+    --input: 260 40% 20%;
+    --ring: 260 60% 47%;
     
-    --sidebar-background: 210 50% 12%;
-    --sidebar-foreground: 210 50% 98%;
-    --sidebar-primary: 281 37% 42%;
+    --sidebar-background: 260 30% 12%;
+    --sidebar-foreground: 260 25% 98%;
+    --sidebar-primary: 260 60% 47%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 145 50% 30%;
-    --sidebar-accent-foreground: 145 50% 90%;
-    --sidebar-border: 210 40% 20%;
-    --sidebar-ring: 281 37% 42%;
+    --sidebar-accent: 43 100% 58%;
+    --sidebar-accent-foreground: 260 60% 47%;
+    --sidebar-border: 260 40% 20%;
+    --sidebar-ring: 260 60% 47%;
   }
 }
 
@@ -95,32 +95,44 @@
   }
 }
 
-/* Apple-inspired components */
+/* START WELL inspired components */
 @layer components {
-  .apple-card {
+  .startwell-card {
     @apply rounded-xl bg-card shadow-sm border border-border/40 hover:shadow-md transition-shadow;
   }
   
-  .apple-button {
-    @apply rounded-full text-sm font-medium transition-all;
+  .startwell-button-primary {
+    @apply bg-startwell-purple text-white rounded-full text-sm font-medium transition-all hover:bg-startwell-purple/90;
   }
   
-  .apple-input {
-    @apply rounded-lg border-border bg-secondary/50 focus:ring-1 focus:ring-primary/20 focus:border-primary/30;
+  .startwell-button-secondary {
+    @apply bg-startwell-yellow text-startwell-purple rounded-full text-sm font-medium transition-all hover:bg-startwell-yellow/90;
   }
   
-  .apple-nav {
-    @apply backdrop-blur-md bg-background/90 shadow-sm border-b border-border/40 sticky top-0 z-10;
+  .startwell-input {
+    @apply rounded-lg border-border bg-white/90 focus:ring-1 focus:ring-startwell-purple/20 focus:border-startwell-purple/30;
+  }
+  
+  .startwell-nav {
+    @apply backdrop-blur-md bg-white shadow-sm sticky top-0 z-10;
+  }
+  
+  .startwell-gradient {
+    @apply bg-gradient-to-r from-startwell-purple to-startwell-purple/90;
+  }
+  
+  .startwell-surface {
+    @apply bg-startwell-lavender/40;
   }
 }
 
-/* Apple-inspired animations */
+/* START WELL animations */
 @layer utilities {
-  .apple-transition {
+  .startwell-transition {
     @apply transition-all duration-300 ease-out;
   }
   
-  .apple-hover {
+  .startwell-hover {
     @apply hover:scale-[1.02] transition-transform duration-300;
   }
 }
