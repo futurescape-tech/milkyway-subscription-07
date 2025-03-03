@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Link } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
 import OneMilkLogo from "@/components/OneMilkLogo";
-import { IndianRupee } from "lucide-react";
+import { IndianRupee, Check } from "lucide-react";
 
 const Index = () => {
   const handleExploreClick = () => {
@@ -83,7 +83,7 @@ const Index = () => {
         </section>
 
         <section className="py-12">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Featured Products</h2>
+          <h2 className="text-3xl font-bold text-center mb-12 text-startwell-purple">Featured Products</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {featuredProducts.map((product) => (
               <Card key={product.id} className="overflow-hidden transition-all hover:shadow-lg">
@@ -118,138 +118,117 @@ const Index = () => {
         </section>
 
         <section className="py-12">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Our Subscription Plans</h2>
+          <h2 className="text-3xl font-bold text-center mb-12 text-startwell-purple">Our Subscription Plans</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="transition-all hover:shadow-lg">
-              <CardHeader>
-                <CardTitle>Basic</CardTitle>
+            <Card className="transition-all hover:shadow-lg bg-white border-startwell-lavender">
+              <CardHeader className="bg-startwell-lavender/30 rounded-t-lg">
+                <CardTitle className="text-startwell-purple">Basic</CardTitle>
                 <CardDescription>Perfect for individuals</CardDescription>
               </CardHeader>
-              <CardContent>
-                <p className="text-3xl font-bold mb-4 flex items-center">
+              <CardContent className="pt-6">
+                <p className="text-3xl font-bold mb-4 flex items-center text-startwell-purple">
                   <IndianRupee className="h-5 w-5 mr-1" />
                   <span>999</span>
                   <span className="text-base font-normal text-gray-500">/month</span>
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
+                    <Check className="h-5 w-5 text-startwell-orange mr-2" />
                     1 liter of milk every 2 days
                   </li>
                   <li className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
+                    <Check className="h-5 w-5 text-startwell-orange mr-2" />
                     Free delivery
                   </li>
                   <li className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
+                    <Check className="h-5 w-5 text-startwell-orange mr-2" />
                     Basic milk varieties
                   </li>
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button className="w-full" asChild>
+                <Button className="w-full startwell-button-primary" asChild>
                   <Link to="/subscription">Subscribe Now</Link>
                 </Button>
               </CardFooter>
             </Card>
 
-            <Card className="transition-all hover:shadow-lg border-2 border-red-400 shadow-md">
-              <CardHeader>
-                <CardTitle>Family</CardTitle>
+            <Card className="transition-all hover:shadow-lg bg-white border-2 border-startwell-orange shadow-md relative">
+              <div className="absolute top-0 right-0 bg-startwell-orange text-white text-xs px-3 py-1 rounded-bl-lg rounded-tr-lg font-semibold">
+                POPULAR
+              </div>
+              <CardHeader className="bg-startwell-orange/20 rounded-t-lg">
+                <CardTitle className="text-startwell-purple">Family</CardTitle>
                 <CardDescription>Great for families</CardDescription>
               </CardHeader>
-              <CardContent>
-                <p className="text-3xl font-bold mb-4 flex items-center">
+              <CardContent className="pt-6">
+                <p className="text-3xl font-bold mb-4 flex items-center text-startwell-purple">
                   <IndianRupee className="h-5 w-5 mr-1" />
                   <span>1,499</span>
                   <span className="text-base font-normal text-gray-500">/month</span>
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
+                    <Check className="h-5 w-5 text-startwell-orange mr-2" />
                     2 liters of milk daily
                   </li>
                   <li className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
+                    <Check className="h-5 w-5 text-startwell-orange mr-2" />
                     Priority delivery
                   </li>
                   <li className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
+                    <Check className="h-5 w-5 text-startwell-orange mr-2" />
                     All milk varieties
                   </li>
                   <li className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
+                    <Check className="h-5 w-5 text-startwell-orange mr-2" />
                     10% discount on additional products
                   </li>
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button className="w-full bg-red-600 hover:bg-red-700" asChild>
+                <Button className="w-full startwell-button-secondary" asChild>
                   <Link to="/subscription">Subscribe Now</Link>
                 </Button>
               </CardFooter>
             </Card>
 
-            <Card className="transition-all hover:shadow-lg">
-              <CardHeader>
-                <CardTitle>Premium</CardTitle>
+            <Card className="transition-all hover:shadow-lg bg-white border-startwell-lavender">
+              <CardHeader className="bg-startwell-yellow/20 rounded-t-lg">
+                <CardTitle className="text-startwell-purple">Premium</CardTitle>
                 <CardDescription>For milk enthusiasts</CardDescription>
               </CardHeader>
-              <CardContent>
-                <p className="text-3xl font-bold mb-4 flex items-center">
+              <CardContent className="pt-6">
+                <p className="text-3xl font-bold mb-4 flex items-center text-startwell-purple">
                   <IndianRupee className="h-5 w-5 mr-1" />
                   <span>2,499</span>
                   <span className="text-base font-normal text-gray-500">/month</span>
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
+                    <Check className="h-5 w-5 text-startwell-orange mr-2" />
                     3 liters of milk daily
                   </li>
                   <li className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
+                    <Check className="h-5 w-5 text-startwell-orange mr-2" />
                     Scheduled delivery times
                   </li>
                   <li className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
+                    <Check className="h-5 w-5 text-startwell-orange mr-2" />
                     Premium milk varieties
                   </li>
                   <li className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
+                    <Check className="h-5 w-5 text-startwell-orange mr-2" />
                     20% discount on additional products
                   </li>
                   <li className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
+                    <Check className="h-5 w-5 text-startwell-orange mr-2" />
                     Exclusive milk tasting events
                   </li>
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button className="w-full" asChild>
+                <Button className="w-full startwell-button-primary" asChild>
                   <Link to="/subscription">Subscribe Now</Link>
                 </Button>
               </CardFooter>
@@ -257,34 +236,34 @@ const Index = () => {
           </div>
         </section>
 
-        <section className="py-12">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Why Choose OneMilk?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <section className="py-12 bg-startwell-lavender/20 rounded-3xl my-8">
+          <h2 className="text-3xl font-bold text-center mb-12 text-startwell-purple">Why Choose OneMilk?</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
             <div className="text-center p-6 rounded-lg bg-white shadow-md">
-              <div className="bg-red-100 mx-auto rounded-full w-16 h-16 flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="bg-startwell-purple/10 mx-auto rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-startwell-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Always On Time</h3>
+              <h3 className="text-xl font-semibold mb-2 text-startwell-purple">Always On Time</h3>
               <p className="text-gray-600">Reliable delivery schedules that fit your lifestyle.</p>
             </div>
             <div className="text-center p-6 rounded-lg bg-white shadow-md">
-              <div className="bg-red-100 mx-auto rounded-full w-16 h-16 flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="bg-startwell-yellow/20 mx-auto rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-startwell-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Quality Guaranteed</h3>
+              <h3 className="text-xl font-semibold mb-2 text-startwell-purple">Quality Guaranteed</h3>
               <p className="text-gray-600">Farm fresh milk with no preservatives or additives.</p>
             </div>
             <div className="text-center p-6 rounded-lg bg-white shadow-md">
-              <div className="bg-red-100 mx-auto rounded-full w-16 h-16 flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="bg-startwell-orange/10 mx-auto rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-startwell-yellow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Flexible Plans</h3>
+              <h3 className="text-xl font-semibold mb-2 text-startwell-purple">Flexible Plans</h3>
               <p className="text-gray-600">Choose the plan that suits your needs and budget.</p>
             </div>
           </div>
