@@ -294,7 +294,7 @@ const Products = () => {
               <CardContent>
                 <p>{product.description}</p>
               </CardContent>
-              <CardFooter className="flex justify-between">
+              <CardFooter className="flex flex-col sm:flex-row gap-3 justify-between">
                 <Button variant="outline" onClick={() => addToCart(product)}>
                   <ShoppingCart className="mr-2 h-4 w-4" />
                   Add to Cart
