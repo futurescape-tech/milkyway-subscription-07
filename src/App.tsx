@@ -15,13 +15,17 @@ import Login from "./pages/Login";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+interface AppProps {
+  basePath?: string;
+}
+
+const App = ({ basePath = '' }: AppProps) => (
   <QueryClientProvider client={queryClient}>
     <KeycloakProvider>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter basename={basePath}>
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/" element={
@@ -45,7 +49,6 @@ const App = () => (
                 </Layout>
               </ProtectedRoute>
             } />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
