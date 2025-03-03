@@ -1,77 +1,73 @@
 
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import React from 'react';
+import { Link, Outlet, useLocation } from 'react-router-dom';
+import { cn } from '@/lib/utils';
+import { Separator } from '@/components/ui/separator';
+import { useAuth } from '@/providers/KeycloakProvider';
+import UserProfile from '@/components/UserProfile';
+import OneMilkLogo from '@/components/OneMilkLogo';
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
+const Layout = () => {
+  const { pathname } = useLocation();
+  const { isLoading } = useAuth();
 
-const Layout = ({ children }: LayoutProps) => {
+  if (isLoading) {
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      <header className="container mx-auto py-6 px-4">
-        <div className="flex justify-between items-center">
-          <Link to="/" className="text-2xl font-bold text-purple-800">MilkSub</Link>
-          <nav className="flex space-x-4">
-            <Button variant="ghost" asChild>
-              <Link to="/">Home</Link>
-            </Button>
-            <Button variant="ghost" asChild>
-              <Link to="/products">Products</Link>
-            </Button>
-            <Button variant="ghost" asChild>
-              <Link to="/subscription">Subscribe</Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link to="/login">Login</Link>
-            </Button>
+    <div className="flex min-h-screen flex-col">
+      <header className="sticky top-0 z-10 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-14 items-center justify-between">
+          <div className="flex items-center gap-2 mr-4">
+            <OneMilkLogo />
+            <span className="text-lg font-semibold">OneMilk</span>
+          </div>
+          
+          <nav className="flex-1 flex items-center">
+            <div className="flex items-center gap-6 text-sm">
+              <Link
+                to="/"
+                className={cn(
+                  "transition-colors hover:text-foreground/80",
+                  pathname === "/" ? "text-foreground font-medium" : "text-foreground/60"
+                )}
+              >
+                Home
+              </Link>
+              <Link
+                to="/products"
+                className={cn(
+                  "transition-colors hover:text-foreground/80",
+                  pathname === "/products" ? "text-foreground font-medium" : "text-foreground/60"
+                )}
+              >
+                Products
+              </Link>
+              <Link
+                to="/subscription"
+                className={cn(
+                  "transition-colors hover:text-foreground/80",
+                  pathname === "/subscription" ? "text-foreground font-medium" : "text-foreground/60"
+                )}
+              >
+                Subscription
+              </Link>
+            </div>
           </nav>
+          
+          <UserProfile />
         </div>
       </header>
-
-      <main className="flex-grow">
-        {children}
-      </main>
-
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4">MilkSub</h3>
-              <p className="text-gray-400">Fresh milk delivered to your doorstep.</p>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2">
-                <li><Link to="/" className="text-gray-400 hover:text-white">Home</Link></li>
-                <li><Link to="/products" className="text-gray-400 hover:text-white">Products</Link></li>
-                <li><Link to="/subscription" className="text-gray-400 hover:text-white">Subscription</Link></li>
-                <li><Link to="/faqs" className="text-gray-400 hover:text-white">FAQs</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Contact</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li>Email: info@milksub.com</li>
-                <li>Phone: +1 (555) 123-4567</li>
-                <li>Address: 123 Dairy Lane, Milk City</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Subscribe to Newsletter</h4>
-              <div className="flex">
-                <input
-                  type="email"
-                  placeholder="Your email"
-                  className="px-4 py-2 rounded-l-md text-black w-full"
-                />
-                <Button className="rounded-l-none">Subscribe</Button>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; {new Date().getFullYear()} MilkSub. All rights reserved.</p>
-          </div>
+      <Separator />
+      <div className="container flex-1 py-6">
+        <Outlet />
+      </div>
+      <footer className="border-t py-4">
+        <div className="container flex items-center justify-between">
+          <p className="text-sm text-muted-foreground">
+            &copy; {new Date().getFullYear()} OneMilk. All rights reserved.
+          </p>
         </div>
       </footer>
     </div>
