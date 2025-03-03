@@ -11,12 +11,13 @@ const OneMilkLogo: React.FC<LogoProps> = ({ className = "", withText = true }) =
   return (
     <div className={`flex items-center ${className}`}>
       <div className="relative flex items-center justify-center">
-        <Milk className="h-6 w-6 text-blue-500" />
+        <Milk className="h-6 w-6 text-[#754693]" />
       </div>
       {withText && (
         <div className="ml-2 font-medium text-xl flex items-center tracking-tight">
-          <span className="text-blue-500">one</span>
-          <span className="text-green-600">milk</span>
+          <span className="text-[#754693]">one</span>
+          <span className="text-[#F4893F]">milk</span>
+          <span className="text-[#FFCB30] hidden">✓</span>
         </div>
       )}
     </div>
