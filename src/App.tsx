@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { KeycloakProvider } from "./providers/KeycloakProvider";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Layout from "./components/Layout";
 import Index from "./pages/Index";
 import Products from "./pages/Products";
 import Subscription from "./pages/Subscription";
@@ -25,17 +26,23 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/" element={
               <ProtectedRoute>
-                <Index />
+                <Layout>
+                  <Index />
+                </Layout>
               </ProtectedRoute>
             } />
             <Route path="/products" element={
               <ProtectedRoute>
-                <Products />
+                <Layout>
+                  <Products />
+                </Layout>
               </ProtectedRoute>
             } />
             <Route path="/subscription" element={
               <ProtectedRoute>
-                <Subscription />
+                <Layout>
+                  <Subscription />
+                </Layout>
               </ProtectedRoute>
             } />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
