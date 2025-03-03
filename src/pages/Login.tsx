@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/providers/KeycloakProvider";
-import { login } from "@/services/keycloak";
+import { login } from "@/services/supabase";
 
 export default function Login() {
   const [username, setUsername] = useState("");
