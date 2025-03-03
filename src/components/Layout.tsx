@@ -25,7 +25,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="container flex h-14 items-center justify-between">
           <div className="flex items-center gap-2 mr-4">
             <OneMilkLogo />
-            <span className="text-lg font-semibold">OneMilk</span>
+            <span className="text-lg font-semibold">onemilk</span>
           </div>
           
           <nav className="flex-1 flex items-center">
@@ -70,7 +70,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <footer className="border-t py-4">
         <div className="container flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} OneMilk. All rights reserved.
+            &copy; {new Date().getFullYear()} onemilk. All rights reserved.
           </p>
         </div>
       </footer>
