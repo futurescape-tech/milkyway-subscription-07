@@ -23,10 +23,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-10 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-14 items-center justify-between">
-          <div className="flex items-center gap-2 mr-4">
-            <OneMilkLogo />
-            <span className="text-lg font-semibold">onemilk</span>
-          </div>
+          <OneMilkLogo />
           
           <nav className="flex-1 flex items-center">
             <div className="flex items-center gap-6 text-sm">
