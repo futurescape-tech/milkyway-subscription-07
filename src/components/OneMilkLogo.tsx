@@ -17,9 +17,9 @@ const OneMilkLogo: React.FC<LogoProps> = ({ className = "", withText = true }) =
         </svg>
       </div>
       {withText && (
-        <div className="ml-2 font-bold text-xl flex items-center">
+        <div className="ml-2 font-medium text-xl flex items-center tracking-tight">
           <span className="text-red-600">one</span>
-          <span className="text-gray-700">milk</span>
+          <span className="text-gray-800">milk</span>
         </div>
       )}
     </div>
