@@ -1,10 +1,8 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import OneMilkLogo from "@/components/OneMilkLogo";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingBag, ShoppingCart, IndianRupee, Heart, Filter } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
@@ -216,39 +214,7 @@ const Products = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="container mx-auto py-6 px-4">
-        <div className="flex justify-between items-center">
-          <OneMilkLogo />
-          <nav className="flex space-x-4 items-center">
-            <Button variant="ghost" asChild>
-              <Link to="/">Home</Link>
-            </Button>
-            <Button variant="ghost" asChild>
-              <Link to="/products">Products</Link>
-            </Button>
-            <Button variant="ghost" asChild>
-              <Link to="/subscription">Subscribe</Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link to="/login">Login</Link>
-            </Button>
-            <Button 
-              variant="outline" 
-              className="relative"
-              onClick={() => setShowCart(true)}
-            >
-              <ShoppingCart className="h-5 w-5" />
-              {cartItems.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {cartItems.length}
-                </span>
-              )}
-            </Button>
-          </nav>
-        </div>
-      </header>
-
-      <main className="container mx-auto py-12 px-4">
+      <main className="container mx-auto py-6 px-4">
         <h1 className="text-4xl font-bold mb-8 text-center">Our Milk Products</h1>
         
         <div className="mb-8 flex flex-wrap justify-center gap-2">
@@ -501,50 +467,6 @@ const Products = () => {
           </DialogContent>
         </Dialog>
       </main>
-
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4">
-                <OneMilkLogo className="text-white" />
-              </h3>
-              <p className="text-gray-400">Fresh milk delivered to your doorstep.</p>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2">
-                <li><Link to="/" className="text-gray-400 hover:text-white">Home</Link></li>
-                <li><Link to="/products" className="text-gray-400 hover:text-white">Products</Link></li>
-                <li><Link to="/subscription" className="text-gray-400 hover:text-white">Subscription</Link></li>
-                <li><Link to="/faqs" className="text-gray-400 hover:text-white">FAQs</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Contact</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li>Email: info@onemilk.com</li>
-                <li>Phone: +91 9876543210</li>
-                <li>Address: 123 Dairy Lane, Milk City</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Subscribe to Newsletter</h4>
-              <div className="flex">
-                <input
-                  type="email"
-                  placeholder="Your email"
-                  className="px-4 py-2 rounded-l-md text-black w-full"
-                />
-                <Button className="rounded-l-none">Subscribe</Button>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; {new Date().getFullYear()} OneMilk. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };

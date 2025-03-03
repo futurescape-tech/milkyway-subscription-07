@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,7 +8,6 @@ import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import OneMilkLogo from "@/components/OneMilkLogo";
 import { Calendar, IndianRupee, PauseCircle, PlayCircle, Truck } from "lucide-react";
 import { useAuth } from "@/providers/KeycloakProvider";
 
@@ -112,7 +110,6 @@ const Subscription = () => {
     });
   };
 
-  // Format price in INR
   const formatPrice = (price: number) => {
     return (
       <div className="flex items-center">
@@ -124,27 +121,7 @@ const Subscription = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="container mx-auto py-6 px-4">
-        <div className="flex justify-between items-center">
-          <OneMilkLogo />
-          <nav className="flex space-x-4">
-            <Button variant="ghost" asChild>
-              <Link to="/">Home</Link>
-            </Button>
-            <Button variant="ghost" asChild>
-              <Link to="/products">Products</Link>
-            </Button>
-            <Button variant="ghost" asChild>
-              <Link to="/subscription">Subscribe</Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link to="/login">Login</Link>
-            </Button>
-          </nav>
-        </div>
-      </header>
-
-      <main className="container mx-auto py-12 px-4">
+      <main className="container mx-auto py-6 px-4">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-4xl font-bold mb-8 text-center">Create Your Milk Subscription</h1>
 
@@ -499,50 +476,6 @@ const Subscription = () => {
           </Card>
         </div>
       </main>
-
-      <footer className="bg-gray-900 text-white py-12 mt-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4">
-                <OneMilkLogo className="text-white" />
-              </h3>
-              <p className="text-gray-400">Fresh milk delivered to your doorstep.</p>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2">
-                <li><Link to="/" className="text-gray-400 hover:text-white">Home</Link></li>
-                <li><Link to="/products" className="text-gray-400 hover:text-white">Products</Link></li>
-                <li><Link to="/subscription" className="text-gray-400 hover:text-white">Subscription</Link></li>
-                <li><Link to="/faqs" className="text-gray-400 hover:text-white">FAQs</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Contact</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li>Email: info@onemilk.com</li>
-                <li>Phone: +91 9876543210</li>
-                <li>Address: 123 Dairy Lane, Milk City</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Subscribe to Newsletter</h4>
-              <div className="flex">
-                <input
-                  type="email"
-                  placeholder="Your email"
-                  className="px-4 py-2 rounded-l-md text-black w-full"
-                />
-                <Button className="rounded-l-none">Subscribe</Button>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; {new Date().getFullYear()} OneMilk. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
