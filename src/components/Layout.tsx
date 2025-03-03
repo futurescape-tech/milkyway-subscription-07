@@ -127,7 +127,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <footer className="border-t py-4">
         <div className="container flex items-center justify-between px-4 md:px-6">
           <p className="text-xs md:text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} onemilk. All rights reserved.
+            &copy; {new Date().getFullYear()} Start Well Milk. All rights reserved.
           </p>
         </div>
       </footer>

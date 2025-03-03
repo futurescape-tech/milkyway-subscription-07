@@ -9,6 +9,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
 import Index from "./pages/Index";
 import Products from "./pages/Products";
+import ProductDetail from "./pages/ProductDetail";
 import Subscription from "./pages/Subscription";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
@@ -40,6 +41,11 @@ const App = ({ basePath = '' }: AppProps) => (
                 <Layout>
                   <Products />
                 </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/products/:id" element={
+              <ProtectedRoute>
+                <ProductDetail />
               </ProtectedRoute>
             } />
             <Route path="/subscription" element={

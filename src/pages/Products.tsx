@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingBag, ShoppingCart, IndianRupee, Heart, Filter } from "lucide-react";
+import { ShoppingBag, ShoppingCart, IndianRupee, Heart, Filter, ShieldCheck } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useAuth } from "@/providers/KeycloakProvider";
 import { Input } from "@/components/ui/input";
@@ -48,7 +48,7 @@ const Products = () => {
       name: "Organic Milk",
       description: "Certified organic milk from free-range, grass-fed cows.",
       price: 450,
-      image: "https://images.unsplash.com/photo-1572443490709-e57452e86fe8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=640&q=80",
+      image: "public/lovable-uploads/efa98d8f-6eb0-4b3b-9f48-623c7aaca7f2.png",
       category: "organic",
       isPopular: true
     },
@@ -73,7 +73,7 @@ const Products = () => {
       name: "Chocolate Milk",
       description: "Delicious chocolate-flavored milk, perfect for a treat.",
       price: 320,
-      image: "https://images.unsplash.com/photo-1607446045710-d5a8fd0895f9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=640&q=80",
+      image: "https://images.unsplash.com/photo-1554654402-bb7e384beef5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=640&q=80",
       category: "flavored"
     },
     {
@@ -291,10 +291,14 @@ const Products = () => {
                 <CardTitle>{product.name}</CardTitle>
                 <CardDescription>{formatPrice(product.price)}</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pb-0">
                 <p>{product.description}</p>
+                <div className="flex items-center mt-3 text-green-600">
+                  <ShieldCheck className="h-4 w-4 mr-1" />
+                  <span className="text-xs font-medium">Quality Guaranteed</span>
+                </div>
               </CardContent>
-              <CardFooter className="flex flex-col sm:flex-row gap-3 justify-between">
+              <CardFooter className="flex flex-col sm:flex-row gap-3 justify-between mt-4">
                 <Button variant="outline" onClick={() => addToCart(product)}>
                   <ShoppingCart className="mr-2 h-4 w-4" />
                   Add to Cart
