@@ -1,12 +1,17 @@
-import React from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+
+import React, { ReactNode } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/providers/KeycloakProvider';
 import UserProfile from '@/components/UserProfile';
 import OneMilkLogo from '@/components/OneMilkLogo';
 
-const Layout = () => {
+interface LayoutProps {
+  children: ReactNode;
+}
+
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { pathname } = useLocation();
   const { isLoading } = useAuth();
 
@@ -60,7 +65,7 @@ const Layout = () => {
       </header>
       <Separator />
       <div className="container flex-1 py-6">
-        <Outlet />
+        {children}
       </div>
       <footer className="border-t py-4">
         <div className="container flex items-center justify-between">
