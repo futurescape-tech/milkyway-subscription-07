@@ -15,6 +15,8 @@ export interface AuthContextType {
   token: string | undefined;
   hasRole: (roles: string[]) => boolean;
   refresh: () => Promise<boolean>;
+  walletBalance: number;
+  addToWallet: (amount: number) => void;
 }
 
 export const AuthContext = React.createContext<AuthContextType>({
@@ -26,11 +28,17 @@ export const AuthContext = React.createContext<AuthContextType>({
   token: undefined,
   hasRole: () => false,
   refresh: async () => false,
+  walletBalance: 0,
+  addToWallet: () => {},
 });
 
 export const KeycloakProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [authenticated, setAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [walletBalance, setWalletBalance] = useState(() => {
+    const savedBalance = localStorage.getItem('wallet_balance');
+    return savedBalance ? parseFloat(savedBalance) : 0;
+  });
 
   const checkAuth = async () => {
     const isAuth = isAuthenticated();
@@ -42,6 +50,18 @@ export const KeycloakProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     checkAuth();
   }, []);
+
+  // Save wallet balance to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('wallet_balance', walletBalance.toString());
+  }, [walletBalance]);
+
+  const addToWallet = (amount: number) => {
+    setWalletBalance(prevBalance => {
+      const newBalance = prevBalance + amount;
+      return newBalance;
+    });
+  };
 
   const refresh = async () => {
     try {
@@ -63,6 +83,8 @@ export const KeycloakProvider: React.FC<AuthProviderProps> = ({ children }) => {
     token: getToken(),
     hasRole: () => true, // Simplified role check
     refresh,
+    walletBalance,
+    addToWallet,
   };
 
   return (

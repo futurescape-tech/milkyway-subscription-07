@@ -7,16 +7,36 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router-dom";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import OneMilkLogo from "@/components/OneMilkLogo";
-import { IndianRupee } from "lucide-react";
+import { Calendar, IndianRupee, PauseCircle, PlayCircle, Truck } from "lucide-react";
+import { useAuth } from "@/providers/KeycloakProvider";
 
 const Subscription = () => {
+  const { walletBalance, addToWallet } = useAuth();
   const [plan, setPlan] = useState("basic");
   const [frequency, setFrequency] = useState("weekly");
   const [couponCode, setCouponCode] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [activeSubscriptions, setActiveSubscriptions] = useState<any[]>([]);
+  const [isPaused, setIsPaused] = useState(false);
+  const [selectedDeliveryDays, setSelectedDeliveryDays] = useState({
+    monday: true,
+    tuesday: false,
+    wednesday: true,
+    thursday: false,
+    friday: true,
+    saturday: false,
+    sunday: false,
+  });
+  const [rechargeAmount, setRechargeAmount] = useState(500);
+  const [trackingInfo, setTrackingInfo] = useState({
+    status: "scheduled",
+    estimatedDelivery: "Tomorrow, 7:00 AM - 8:00 AM",
+    deliveryPersonName: "Raj Kumar",
+    deliveryPersonPhone: "+91 98765 43210",
+  });
 
   const plans = {
     basic: {
@@ -37,26 +57,59 @@ const Subscription = () => {
   };
 
   const handleSubscribe = () => {
-    toast({
-      title: "Subscription Started!",
+    const newSubscription = {
+      id: Date.now(),
+      plan: plans[plan as keyof typeof plans].name,
+      description: plans[plan as keyof typeof plans].description,
+      price: plans[plan as keyof typeof plans].price,
+      frequency,
+      status: "active",
+      startDate: new Date().toLocaleDateString(),
+      nextDelivery: "Tomorrow",
+    };
+    
+    setActiveSubscriptions([...activeSubscriptions, newSubscription]);
+    
+    toast("Subscription Started!", {
       description: `You've successfully subscribed to the ${plans[plan as keyof typeof plans].name} plan.`,
     });
+    
     setIsDialogOpen(false);
   };
 
   const handleCouponApply = () => {
     if (couponCode.toLowerCase() === "newcustomer") {
-      toast({
-        title: "Coupon Applied!",
+      toast("Coupon Applied!", {
         description: "You've received a 10% discount on your subscription.",
       });
     } else {
-      toast({
-        title: "Invalid Coupon",
+      toast("Invalid Coupon", {
         description: "The coupon code you entered is invalid or expired.",
-        variant: "destructive"
       });
     }
+  };
+
+  const handlePauseResume = () => {
+    setIsPaused(!isPaused);
+    toast(isPaused ? "Subscription Resumed" : "Subscription Paused", {
+      description: isPaused 
+        ? "Your subscription has been resumed. Deliveries will continue as scheduled." 
+        : "Your subscription has been paused. You can resume it anytime.",
+    });
+  };
+
+  const handleDeliveryDayToggle = (day: string) => {
+    setSelectedDeliveryDays(prev => ({
+      ...prev,
+      [day]: !prev[day as keyof typeof prev]
+    }));
+  };
+
+  const handleWalletRecharge = () => {
+    addToWallet(rechargeAmount);
+    toast("Wallet Recharged", {
+      description: `₹${rechargeAmount} has been added to your wallet.`,
+    });
   };
 
   // Format price in INR
@@ -94,6 +147,98 @@ const Subscription = () => {
       <main className="container mx-auto py-12 px-4">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-4xl font-bold mb-8 text-center">Create Your Milk Subscription</h1>
+
+          {activeSubscriptions.length > 0 && (
+            <Card className="mb-8 border-primary/20">
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <span>Active Subscriptions</span>
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-2"
+                    onClick={handlePauseResume}
+                  >
+                    {isPaused ? (
+                      <>
+                        <PlayCircle className="h-4 w-4" />
+                        Resume
+                      </>
+                    ) : (
+                      <>
+                        <PauseCircle className="h-4 w-4" />
+                        Pause
+                      </>
+                    )}
+                  </Button>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {activeSubscriptions.map((subscription) => (
+                    <div key={subscription.id} className="border rounded-md p-4">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="font-medium">{subscription.plan} Plan</h3>
+                          <p className="text-sm text-gray-500">{subscription.description}</p>
+                          <p className="text-sm">Started on: {subscription.startDate}</p>
+                          <p className="text-sm">Next delivery: {subscription.nextDelivery}</p>
+                        </div>
+                        <div className="text-right">
+                          <div className="font-bold flex items-center justify-end">
+                            {formatPrice(subscription.price)}
+                          </div>
+                          <p className="text-sm text-gray-500">
+                            {subscription.frequency} billing
+                          </p>
+                          <span className={`inline-block px-2 py-1 text-xs rounded-full mt-2 ${
+                            isPaused ? "bg-yellow-100 text-yellow-800" : "bg-green-100 text-green-800"
+                          }`}>
+                            {isPaused ? "Paused" : "Active"}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle>Order Tracking</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Truck className="h-8 w-8 text-primary" />
+                    <div>
+                      <h3 className="font-medium">Next Delivery</h3>
+                      <p className="text-sm text-gray-500">{trackingInfo.estimatedDelivery}</p>
+                    </div>
+                  </div>
+                  <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                    {trackingInfo.status === "scheduled" ? "Scheduled" : "Out for Delivery"}
+                  </span>
+                </div>
+                <Separator />
+                <div>
+                  <h4 className="text-sm font-medium mb-2">Delivery Partner</h4>
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                      {trackingInfo.deliveryPersonName.split(' ').map(n => n[0]).join('')}
+                    </div>
+                    <div>
+                      <p className="font-medium">{trackingInfo.deliveryPersonName}</p>
+                      <p className="text-sm text-gray-500">{trackingInfo.deliveryPersonPhone}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
           <Card className="mb-8">
             <CardHeader>
@@ -172,6 +317,27 @@ const Subscription = () => {
 
           <Card className="mb-8">
             <CardHeader>
+              <CardTitle>Delivery Days</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-wrap gap-2">
+                {Object.entries(selectedDeliveryDays).map(([day, isSelected]) => (
+                  <Button
+                    key={day}
+                    variant={isSelected ? "default" : "outline"}
+                    className="flex items-center gap-2"
+                    onClick={() => handleDeliveryDayToggle(day)}
+                  >
+                    <Calendar className="h-4 w-4" />
+                    {day.charAt(0).toUpperCase() + day.slice(1)}
+                  </Button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="mb-8">
+            <CardHeader>
               <CardTitle>Delivery Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -206,6 +372,53 @@ const Subscription = () => {
               <div className="space-y-2">
                 <Label htmlFor="phone">Phone Number</Label>
                 <Input id="phone" placeholder="+91 98765 43210" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle>Wallet & Payments</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="bg-primary/10 p-4 rounded-lg">
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="font-medium">Wallet Balance</h3>
+                  <span className="font-bold text-xl flex items-center">
+                    <IndianRupee className="h-4 w-4 mr-1" />
+                    {walletBalance.toFixed(2)}
+                  </span>
+                </div>
+              </div>
+              <div className="flex space-x-2">
+                <Input
+                  type="number"
+                  value={rechargeAmount}
+                  onChange={(e) => setRechargeAmount(Number(e.target.value))}
+                  placeholder="Amount to add"
+                />
+                <Button onClick={handleWalletRecharge}>Recharge</Button>
+              </div>
+              <div className="mt-4">
+                <h4 className="font-medium mb-2">Payment Methods</h4>
+                <RadioGroup defaultValue="wallet" className="space-y-2">
+                  <div className="flex items-center space-x-2 border p-3 rounded-md">
+                    <RadioGroupItem value="wallet" id="wallet" />
+                    <Label htmlFor="wallet">Pay from Wallet</Label>
+                  </div>
+                  <div className="flex items-center space-x-2 border p-3 rounded-md">
+                    <RadioGroupItem value="upi" id="upi" />
+                    <Label htmlFor="upi">UPI</Label>
+                  </div>
+                  <div className="flex items-center space-x-2 border p-3 rounded-md">
+                    <RadioGroupItem value="card" id="card" />
+                    <Label htmlFor="card">Credit/Debit Card</Label>
+                  </div>
+                  <div className="flex items-center space-x-2 border p-3 rounded-md">
+                    <RadioGroupItem value="cod" id="cod" />
+                    <Label htmlFor="cod">Cash on Delivery</Label>
+                  </div>
+                </RadioGroup>
               </div>
             </CardContent>
           </Card>
