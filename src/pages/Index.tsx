@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
@@ -58,26 +57,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="container mx-auto py-6 px-4">
-        <div className="flex justify-between items-center">
-          <OneMilkLogo />
-          <nav className="flex space-x-4">
-            <Button variant="ghost" asChild>
-              <Link to="/">Home</Link>
-            </Button>
-            <Button variant="ghost" asChild>
-              <Link to="/products">Products</Link>
-            </Button>
-            <Button variant="ghost" asChild>
-              <Link to="/subscription">Subscribe</Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link to="/login">Login</Link>
-            </Button>
-          </nav>
-        </div>
-      </header>
-
       <main className="container mx-auto py-12 px-4">
         <section className="flex flex-col md:flex-row items-center gap-12 mb-20">
           <div className="md:w-1/2 space-y-6">
