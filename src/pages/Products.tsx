@@ -49,7 +49,7 @@ const Products = () => {
       name: "Organic Milk",
       description: "Certified organic milk from free-range, grass-fed cows.",
       price: 450,
-      image: "public/lovable-uploads/efa98d8f-6eb0-4b3b-9f48-623c7aaca7f2.png",
+      image: "public/lovable-uploads/dfa6299d-8442-4025-a976-3edab27f24b6.png",
       category: "organic",
       isPopular: true
     },
@@ -74,7 +74,7 @@ const Products = () => {
       name: "Chocolate Milk",
       description: "Delicious chocolate-flavored milk, perfect for a treat.",
       price: 320,
-      image: "https://images.unsplash.com/photo-1554654402-bb7e384beef5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=640&q=80",
+      image: "public/lovable-uploads/053e3dbc-e1f3-451e-8e6b-cb42d26cb4d2.png",
       category: "flavored"
     },
     {
@@ -91,7 +91,7 @@ const Products = () => {
       name: "Fresh Paneer",
       description: "Homemade soft and tender paneer made from whole milk.",
       price: 399,
-      image: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=640&q=80",
+      image: "public/lovable-uploads/8a14069f-517c-49ed-ba98-18b0c5030010.png",
       category: "dairy-products"
     },
     {
@@ -174,14 +174,14 @@ const Products = () => {
       setCartItems([...cartItems, { ...product, quantity: 1 }]);
     }
     
-    toast("Added to cart", {
+    toast.success("Added to cart", {
       description: `${product.name} has been added to your cart.`
     });
   };
 
   const removeFromCart = (productId: number) => {
     setCartItems(cartItems.filter(item => item.id !== productId));
-    toast("Removed from cart", {
+    toast.success("Removed from cart", {
       description: "Item has been removed from your cart."
     });
   };
@@ -219,13 +219,13 @@ const Products = () => {
 
   const placeOrder = () => {
     if (!deliveryAddress) {
-      toast("Error", {
+      toast.error("Error", {
         description: "Please enter your delivery address."
       });
       return;
     }
     
-    toast("Order Placed", {
+    toast.success("Order Placed", {
       description: "Your order has been placed successfully."
     });
     
@@ -333,7 +333,7 @@ const Products = () => {
                   />
                 </Button>
                 {product.isPopular && (
-                  <div className="absolute top-2 left-2 px-3 py-1 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-startwell-orange to-startwell-purple animate-pulse">
+                  <div className="absolute top-2 left-2 px-3 py-1 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-blue-700 to-teal-500 animate-pulse">
                     Popular
                   </div>
                 )}
@@ -344,7 +344,7 @@ const Products = () => {
               </CardHeader>
               <CardContent className="pb-0">
                 <p>{product.description}</p>
-                <div className="flex items-center mt-3 text-green-600">
+                <div className="flex items-center mt-3">
                   <ShieldCheck className="h-4 w-4 mr-1 text-green-600" />
                   <span className="text-xs font-medium text-green-600">Quality Guaranteed</span>
                 </div>

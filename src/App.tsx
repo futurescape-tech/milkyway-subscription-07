@@ -38,6 +38,11 @@ const App = ({ basePath = '' }: AppProps) => {
     };
   }, []);
 
+  // Update document title with new brand name
+  useEffect(() => {
+    document.title = "StartWell Dairy";
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <KeycloakProvider>
@@ -63,7 +68,9 @@ const App = ({ basePath = '' }: AppProps) => {
               } />
               <Route path="/products/:id" element={
                 <ProtectedRoute>
-                  <ProductDetail />
+                  <Layout>
+                    <ProductDetail />
+                  </Layout>
                 </ProtectedRoute>
               } />
               <Route path="/subscription" element={

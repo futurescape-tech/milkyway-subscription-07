@@ -18,6 +18,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { isLoading, username, walletBalance } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [cartItems, setCartItems] = useState<any[]>([]);
+  const [firstName, setFirstName] = useState<string>("");
+  
+  // Load user profile data
+  useEffect(() => {
+    const userProfileData = localStorage.getItem('user_profile');
+    if (userProfileData) {
+      try {
+        const profileData = JSON.parse(userProfileData);
+        if (profileData.firstName) {
+          setFirstName(profileData.firstName);
+        }
+      } catch (e) {
+        console.error('Error parsing profile data:', e);
+      }
+    }
+  }, []);
   
   // Load cart items on component mount
   useEffect(() => {
@@ -42,6 +58,19 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         }
       } else {
         setCartItems([]);
+      }
+      
+      // Also check for profile data changes
+      const userProfileData = localStorage.getItem('user_profile');
+      if (userProfileData) {
+        try {
+          const profileData = JSON.parse(userProfileData);
+          if (profileData.firstName) {
+            setFirstName(profileData.firstName);
+          }
+        } catch (e) {
+          console.error('Error parsing profile data:', e);
+        }
       }
     };
     
@@ -121,7 +150,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </div>
           
           <div className="ml-auto hidden md:block">
-            <UserProfile />
+            <UserProfile firstName={firstName} />
           </div>
         </div>
         
@@ -161,7 +190,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   Subscription
                 </Link>
                 <div className="pt-2 border-t">
-                  <UserProfile />
+                  <UserProfile firstName={firstName} />
                 </div>
               </div>
             </div>
@@ -175,7 +204,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <footer className="border-t py-4">
         <div className="container flex items-center justify-between px-4 md:px-6">
           <p className="text-xs md:text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Start Well Milk. All rights reserved.
+            &copy; {new Date().getFullYear()} StartWell Dairy. All rights reserved.
           </p>
         </div>
       </footer>

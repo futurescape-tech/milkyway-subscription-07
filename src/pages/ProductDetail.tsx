@@ -38,7 +38,7 @@ type Product = {
   }[];
 };
 
-// Sample product data - same as in Products.tsx
+// Sample product data - updated with new images
 const allProducts: Product[] = [
   {
     id: 1,
@@ -122,7 +122,7 @@ const allProducts: Product[] = [
     name: "Organic Milk",
     description: "Certified organic milk from free-range, grass-fed cows. Our organic milk comes from cows raised on certified organic farms where they graze on pesticide-free pastures and are never treated with antibiotics or growth hormones.",
     price: 450,
-    image: "public/lovable-uploads/efa98d8f-6eb0-4b3b-9f48-623c7aaca7f2.png",
+    image: "public/lovable-uploads/dfa6299d-8442-4025-a976-3edab27f24b6.png",
     category: "organic",
     isPopular: true,
     nutrition: {
@@ -237,7 +237,7 @@ const allProducts: Product[] = [
     name: "Chocolate Milk",
     description: "Delicious chocolate-flavored milk, perfect for a treat. Made with real cocoa and just the right amount of sweetness, our chocolate milk is a delightful indulgence that both kids and adults will love.",
     price: 320,
-    image: "https://images.unsplash.com/photo-1554654402-bb7e384beef5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=640&q=80",
+    image: "public/lovable-uploads/053e3dbc-e1f3-451e-8e6b-cb42d26cb4d2.png",
     category: "flavored",
     nutrition: {
       calories: "180 kcal per cup",
@@ -314,7 +314,7 @@ const allProducts: Product[] = [
     name: "Fresh Paneer",
     description: "Homemade soft and tender paneer made from whole milk. Our fresh paneer is made daily using traditional methods, resulting in a soft, non-crumbly texture perfect for all your favorite paneer dishes.",
     price: 399,
-    image: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=640&q=80",
+    image: "public/lovable-uploads/8a14069f-517c-49ed-ba98-18b0c5030010.png",
     category: "dairy-products",
     nutrition: {
       calories: "365 kcal per 100g",
@@ -413,13 +413,43 @@ const ProductDetail = () => {
     } else {
       // If product not found, redirect to products page
       navigate("/products");
-      toast("Product not found", { description: "The requested product could not be found." });
+      toast.error("Product not found", { description: "The requested product could not be found." });
     }
   }, [id, navigate]);
 
   const addToCart = () => {
     if (product) {
-      toast("Added to cart", {
+      // Save to localStorage
+      const savedCart = localStorage.getItem('cart_items');
+      let cartItems = [];
+      
+      if (savedCart) {
+        try {
+          cartItems = JSON.parse(savedCart);
+          
+          // Check if product already exists in cart
+          const existingItemIndex = cartItems.findIndex((item: any) => item.id === product.id);
+          
+          if (existingItemIndex >= 0) {
+            cartItems[existingItemIndex] = {
+              ...cartItems[existingItemIndex],
+              quantity: (cartItems[existingItemIndex].quantity || 1) + quantity
+            };
+          } else {
+            cartItems.push({ ...product, quantity });
+          }
+        } catch (e) {
+          console.error('Error parsing saved cart:', e);
+          cartItems = [{ ...product, quantity }];
+        }
+      } else {
+        cartItems = [{ ...product, quantity }];
+      }
+      
+      localStorage.setItem('cart_items', JSON.stringify(cartItems));
+      
+      // Show success message
+      toast.success("Added to cart", {
         description: `${quantity} ${quantity > 1 ? "units" : "unit"} of ${product.name} added to your cart.`
       });
     }
@@ -436,199 +466,202 @@ const ProductDetail = () => {
   }
 
   return (
-    <Layout>
-      <div className="container mx-auto py-6">
-        <Button 
-          variant="ghost" 
-          onClick={() => navigate("/products")} 
-          className="mb-6 flex items-center"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Products
-        </Button>
+    <div className="container mx-auto py-6">
+      <Button 
+        variant="ghost" 
+        onClick={() => navigate("/products")} 
+        className="mb-6 flex items-center"
+      >
+        <ArrowLeft className="h-4 w-4 mr-2" />
+        Back to Products
+      </Button>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="relative">
-            <div className="aspect-square overflow-hidden rounded-xl bg-gray-100">
-              <img 
-                src={product.image} 
-                alt={product.name} 
-                className="h-full w-full object-cover"
-              />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="relative">
+          <div className="aspect-square overflow-hidden rounded-xl bg-gray-100">
+            <img 
+              src={product.image} 
+              alt={product.name} 
+              className="h-full w-full object-cover"
+            />
+          </div>
+          {product.isPopular && (
+            <div className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-blue-700 to-teal-500">
+              Popular
             </div>
-            {product.isPopular && (
-              <Badge className="absolute top-4 left-4" variant="secondary">
-                Popular
+          )}
+        </div>
+
+        <div className="space-y-6">
+          <div>
+            <h1 className="text-3xl font-bold">{product.name}</h1>
+            <div className="mt-2 flex items-center">
+              <div className="text-xl font-semibold text-startwell-purple">
+                {formatPrice(product.price)}
+              </div>
+              <Badge variant="outline" className="ml-4">
+                {product.category.replace('-', ' ')}
               </Badge>
-            )}
+            </div>
           </div>
 
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-3xl font-bold">{product.name}</h1>
-              <div className="mt-2 flex items-center">
-                <div className="text-xl font-semibold text-startwell-purple">
-                  {formatPrice(product.price)}
-                </div>
-                <Badge variant="outline" className="ml-4">
-                  {product.category.replace('-', ' ')}
-                </Badge>
-              </div>
+          <div className="flex items-center">
+            <div className="flex">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <Star 
+                  key={star} 
+                  className={`h-5 w-5 ${star <= 4.5 ? "text-yellow-500 fill-yellow-500" : "text-gray-300"}`} 
+                />
+              ))}
             </div>
+            <span className="ml-2 text-sm text-gray-600">
+              4.5 (Based on {product.reviews?.length || 0} reviews)
+            </span>
+          </div>
 
-            <div className="flex items-center">
-              <div className="flex">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star 
-                    key={star} 
-                    className={`h-5 w-5 ${star <= 4.5 ? "text-yellow-500 fill-yellow-500" : "text-gray-300"}`} 
-                  />
-                ))}
-              </div>
-              <span className="ml-2 text-sm text-gray-600">
-                4.5 (Based on {product.reviews?.length || 0} reviews)
-              </span>
-            </div>
+          <div className="flex items-center p-3 bg-green-50 rounded-lg">
+            <ShieldCheck className="h-5 w-5 text-green-600 mr-2" />
+            <span className="text-sm font-medium text-green-800">Quality Guaranteed</span>
+          </div>
 
-            <div className="flex items-center p-3 bg-green-50 rounded-lg">
-              <ShieldCheck className="h-5 w-5 text-green-600 mr-2" />
-              <span className="text-sm font-medium text-green-800">Quality Guaranteed</span>
-            </div>
+          <p className="text-gray-700 leading-relaxed">{product.description}</p>
 
-            <p className="text-gray-700 leading-relaxed">{product.description}</p>
-
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center border rounded-md">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-10 w-10 rounded-none"
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                >
-                  -
-                </Button>
-                <span className="w-12 text-center">{quantity}</span>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-10 w-10 rounded-none"
-                  onClick={() => setQuantity(quantity + 1)}
-                >
-                  +
-                </Button>
-              </div>
-              <Button className="flex-1" onClick={addToCart}>
-                <ShoppingCart className="mr-2 h-4 w-4" />
-                Add to Cart
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center border rounded-md">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-10 w-10 rounded-none"
+                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+              >
+                -
+              </Button>
+              <span className="w-12 text-center">{quantity}</span>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-10 w-10 rounded-none"
+                onClick={() => setQuantity(quantity + 1)}
+              >
+                +
               </Button>
             </div>
-
-            <Separator />
-
-            <Tabs defaultValue="nutrition">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="nutrition">Nutrition</TabsTrigger>
-                <TabsTrigger value="ingredients">Ingredients</TabsTrigger>
-                <TabsTrigger value="benefits">Benefits</TabsTrigger>
-              </TabsList>
-              <TabsContent value="nutrition" className="space-y-4 mt-4">
-                <h3 className="font-medium">Nutrition Information</h3>
-                <div className="grid grid-cols-2 gap-3">
-                  {product.nutrition && Object.entries(product.nutrition).map(([key, value]) => (
-                    <div key={key} className="bg-gray-50 p-3 rounded">
-                      <p className="text-sm text-gray-500 capitalize">{key}</p>
-                      <p className="font-medium">{value}</p>
-                    </div>
-                  ))}
-                </div>
-              </TabsContent>
-              <TabsContent value="ingredients" className="mt-4">
-                <h3 className="font-medium mb-3">Ingredients</h3>
-                <ul className="list-disc pl-5 space-y-1">
-                  {product.ingredients?.map((ingredient, index) => (
-                    <li key={index} className="text-gray-700">{ingredient}</li>
-                  ))}
-                </ul>
-              </TabsContent>
-              <TabsContent value="benefits" className="mt-4">
-                <h3 className="font-medium mb-3">Health Benefits</h3>
-                <ul className="space-y-2">
-                  {product.benefits?.map((benefit, index) => (
-                    <li key={index} className="flex items-start">
-                      <div className="h-5 w-5 rounded-full bg-startwell-lavender flex items-center justify-center mt-0.5 mr-2">
-                        <span className="text-xs text-startwell-purple font-medium">{index + 1}</span>
-                      </div>
-                      <span className="text-gray-700">{benefit}</span>
-                    </li>
-                  ))}
-                </ul>
-              </TabsContent>
-            </Tabs>
+            <Button className="flex-1" onClick={addToCart}>
+              <ShoppingCart className="mr-2 h-4 w-4" />
+              Add to Cart
+            </Button>
           </div>
-        </div>
 
-        {product.reviews && product.reviews.length > 0 && (
-          <div className="mt-12">
-            <h2 className="text-2xl font-bold mb-6">Customer Reviews</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {product.reviews.map((review) => (
-                <Card key={review.id}>
-                  <CardContent className="p-6">
-                    <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <p className="font-medium">{review.user}</p>
-                        <p className="text-sm text-gray-500">{review.date}</p>
-                      </div>
-                      <div className="flex">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <Star 
-                            key={star} 
-                            className={`h-4 w-4 ${star <= review.rating ? "text-yellow-500 fill-yellow-500" : "text-gray-300"}`} 
-                          />
-                        ))}
-                      </div>
-                    </div>
-                    <p className="text-gray-700">{review.comment}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        )}
+          <Separator />
 
-        <div className="mt-12">
-          <h2 className="text-2xl font-bold mb-6">You might also like</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {allProducts
-              .filter(p => p.id !== product.id && p.category === product.category)
-              .slice(0, 4)
-              .map((relatedProduct) => (
-                <Card key={relatedProduct.id} className="overflow-hidden h-full flex flex-col">
-                  <div className="h-48 overflow-hidden">
-                    <img 
-                      src={relatedProduct.image} 
-                      alt={relatedProduct.name} 
-                      className="w-full h-full object-cover transition-transform hover:scale-105"
-                    />
+          <Tabs defaultValue="nutrition">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="nutrition">Nutrition</TabsTrigger>
+              <TabsTrigger value="ingredients">Ingredients</TabsTrigger>
+              <TabsTrigger value="benefits">Benefits</TabsTrigger>
+            </TabsList>
+            <TabsContent value="nutrition" className="space-y-4 mt-4">
+              <h3 className="font-medium">Nutrition Information</h3>
+              <div className="grid grid-cols-2 gap-3">
+                {product.nutrition && Object.entries(product.nutrition).map(([key, value]) => (
+                  <div key={key} className="bg-gray-50 p-3 rounded">
+                    <p className="text-sm text-gray-500 capitalize">{key}</p>
+                    <p className="font-medium">{value}</p>
                   </div>
-                  <CardContent className="p-4 flex-1 flex flex-col">
-                    <h3 className="font-medium mb-1">{relatedProduct.name}</h3>
-                    <p className="text-sm text-gray-500 mb-4">{formatPrice(relatedProduct.price)}</p>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="mt-auto"
-                      onClick={() => navigate(`/products/${relatedProduct.id}`)}
-                    >
-                      View Details
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-          </div>
+                ))}
+              </div>
+            </TabsContent>
+            <TabsContent value="ingredients" className="mt-4">
+              <h3 className="font-medium mb-3">Ingredients</h3>
+              <ul className="list-disc pl-5 space-y-1">
+                {product.ingredients?.map((ingredient, index) => (
+                  <li key={index} className="text-gray-700">{ingredient}</li>
+                ))}
+              </ul>
+            </TabsContent>
+            <TabsContent value="benefits" className="mt-4">
+              <h3 className="font-medium mb-3">Health Benefits</h3>
+              <ul className="space-y-2">
+                {product.benefits?.map((benefit, index) => (
+                  <li key={index} className="flex items-start">
+                    <div className="h-5 w-5 rounded-full bg-startwell-lavender flex items-center justify-center mt-0.5 mr-2">
+                      <span className="text-xs text-startwell-purple font-medium">{index + 1}</span>
+                    </div>
+                    <span className="text-gray-700">{benefit}</span>
+                  </li>
+                ))}
+              </ul>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
-    </Layout>
+
+      {product.reviews && product.reviews.length > 0 && (
+        <div className="mt-12">
+          <h2 className="text-2xl font-bold mb-6">Customer Reviews</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {product.reviews.map((review) => (
+              <Card key={review.id}>
+                <CardContent className="p-6">
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <p className="font-medium">{review.user}</p>
+                      <p className="text-sm text-gray-500">{review.date}</p>
+                    </div>
+                    <div className="flex">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star 
+                          key={star} 
+                          className={`h-4 w-4 ${star <= review.rating ? "text-yellow-500 fill-yellow-500" : "text-gray-300"}`} 
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-gray-700">{review.comment}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="mt-12">
+        <h2 className="text-2xl font-bold mb-6">You might also like</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {allProducts
+            .filter(p => p.id !== product.id && p.category === product.category)
+            .slice(0, 4)
+            .map((relatedProduct) => (
+              <Card key={relatedProduct.id} className="overflow-hidden h-full flex flex-col">
+                <div className="h-48 overflow-hidden relative">
+                  <img 
+                    src={relatedProduct.image} 
+                    alt={relatedProduct.name} 
+                    className="w-full h-full object-cover transition-transform hover:scale-105"
+                  />
+                  {relatedProduct.isPopular && (
+                    <div className="absolute top-2 left-2 px-3 py-1 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-blue-700 to-teal-500">
+                      Popular
+                    </div>
+                  )}
+                </div>
+                <CardContent className="p-4 flex-1 flex flex-col">
+                  <h3 className="font-medium mb-1">{relatedProduct.name}</h3>
+                  <p className="text-sm text-gray-500 mb-4">{formatPrice(relatedProduct.price)}</p>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="mt-auto"
+                    onClick={() => navigate(`/products/${relatedProduct.id}`)}
+                  >
+                    View Details
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+        </div>
+      </div>
+    </div>
   );
 };
 
