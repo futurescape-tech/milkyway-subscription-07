@@ -1,5 +1,5 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/providers/KeycloakProvider';
 import {
@@ -16,7 +16,8 @@ import {
   Camera,
   Upload,
   X,
-  Check
+  Check,
+  Milk
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -44,11 +45,28 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import OneMilkLogo from './OneMilkLogo';
 
 const UserProfile = () => {
-  const { username, logout, walletBalance } = useAuth();
+  const { username, logout, walletBalance, addToWallet } = useAuth();
   const [activeDialog, setActiveDialog] = useState<string | null>(null);
   const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
+  
+  // Personal Information states
+  const [personalInfo, setPersonalInfo] = useState({
+    firstName: username?.split(' ')[0] || '',
+    lastName: username?.split(' ')[1] || '',
+    email: 'user@example.com',
+    phone: '+91 9876543210'
+  });
+
+  // Address states
+  const [address, setAddress] = useState({
+    address1: '123 Milk Street',
+    address2: 'Apartment 4B',
+    city: 'Mumbai',
+    state: 'Maharashtra',
+    pin: '400001'
+  });
   
   // Order related states
   const [orders, setOrders] = useState<any[]>([
@@ -102,6 +120,43 @@ const UserProfile = () => {
     voiceInstructions: "",
     doorImage: null as string | null,
   });
+
+  // Attempt to load data from localStorage on component mount
+  useEffect(() => {
+    const savedPhoto = localStorage.getItem('profile_photo');
+    if (savedPhoto) setProfilePhoto(savedPhoto);
+    
+    const savedPersonalInfo = localStorage.getItem('personal_info');
+    if (savedPersonalInfo) setPersonalInfo(JSON.parse(savedPersonalInfo));
+    
+    const savedAddress = localStorage.getItem('address_info');
+    if (savedAddress) setAddress(JSON.parse(savedAddress));
+    
+    const savedVacations = localStorage.getItem('vacations');
+    if (savedVacations) setActiveVacations(JSON.parse(savedVacations));
+    
+    const savedPreferences = localStorage.getItem('delivery_preferences');
+    if (savedPreferences) setDeliveryPreferences(JSON.parse(savedPreferences));
+  }, []);
+
+  // Save profile photo to localStorage whenever it changes
+  useEffect(() => {
+    if (profilePhoto) {
+      localStorage.setItem('profile_photo', profilePhoto);
+    } else {
+      localStorage.removeItem('profile_photo');
+    }
+  }, [profilePhoto]);
+
+  // Save active vacations to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('vacations', JSON.stringify(activeVacations));
+  }, [activeVacations]);
+
+  // Save delivery preferences to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('delivery_preferences', JSON.stringify(deliveryPreferences));
+  }, [deliveryPreferences]);
 
   const handleItemClick = (dialogId: string) => {
     setActiveDialog(dialogId);
@@ -192,6 +247,74 @@ const UserProfile = () => {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handlePersonalInfoChange = (field: string, value: string) => {
+    setPersonalInfo(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleAddressChange = (field: string, value: string) => {
+    setAddress(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const savePersonalInfo = () => {
+    // Validate inputs
+    if (!personalInfo.firstName.trim() || !personalInfo.lastName.trim()) {
+      toast.error("First name and last name are required");
+      return;
+    }
+    
+    if (!personalInfo.email.includes('@') || !personalInfo.email.includes('.')) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+    
+    if (!personalInfo.phone.trim() || personalInfo.phone.length < 10) {
+      toast.error("Please enter a valid phone number");
+      return;
+    }
+    
+    // In a real app, you would send this to an API
+    // For now, we'll just save to localStorage
+    localStorage.setItem('personal_info', JSON.stringify(personalInfo));
+    
+    // Add a small delay to simulate an API call
+    setTimeout(() => {
+      toast.success("Personal information saved successfully");
+    }, 500);
+  };
+
+  const saveAddress = () => {
+    // Validate inputs
+    if (!address.address1.trim()) {
+      toast.error("Address line 1 is required");
+      return;
+    }
+    
+    if (!address.city.trim() || !address.state.trim()) {
+      toast.error("City and state are required");
+      return;
+    }
+    
+    if (!address.pin.trim() || address.pin.length !== 6) {
+      toast.error("Please enter a valid 6-digit PIN code");
+      return;
+    }
+    
+    // In a real app, you would send this to an API
+    // For now, we'll just save to localStorage
+    localStorage.setItem('address_info', JSON.stringify(address));
+    
+    // Add a small delay to simulate an API call
+    setTimeout(() => {
+      toast.success("Address saved successfully");
+    }, 500);
   };
 
   return (
@@ -359,7 +482,24 @@ const UserProfile = () => {
                       <span className="font-semibold">Monthly Price: ₹{subscription.price}</span>
                       <div className="space-x-2">
                         <Button variant="outline" size="sm">Upgrade</Button>
-                        <Button variant="outline" size="sm" className={subscription.status === 'Active' ? 'text-yellow-600' : 'text-green-600'}>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className={subscription.status === 'Active' ? 'text-yellow-600' : 'text-green-600'}
+                          onClick={() => {
+                            const updatedSubscriptions = subscriptions.map(sub => 
+                              sub.id === subscription.id 
+                                ? {...sub, status: sub.status === 'Active' ? 'Paused' : 'Active'} 
+                                : sub
+                            );
+                            setSubscriptions(updatedSubscriptions);
+                            toast.success(
+                              subscription.status === 'Active' 
+                                ? 'Subscription paused successfully' 
+                                : 'Subscription resumed successfully'
+                            );
+                          }}
+                        >
                           {subscription.status === 'Active' ? 'Pause' : 'Resume'}
                         </Button>
                       </div>
@@ -521,49 +661,96 @@ const UserProfile = () => {
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="firstName">First Name</Label>
-                          <Input id="firstName" defaultValue={username?.split(' ')[0] || ''} />
+                          <Input 
+                            id="firstName" 
+                            value={personalInfo.firstName}
+                            onChange={(e) => handlePersonalInfoChange('firstName', e.target.value)}
+                          />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="lastName">Last Name</Label>
-                          <Input id="lastName" defaultValue={username?.split(' ')[1] || ''} />
+                          <Input 
+                            id="lastName" 
+                            value={personalInfo.lastName}
+                            onChange={(e) => handlePersonalInfoChange('lastName', e.target.value)}
+                          />
                         </div>
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="email">Email</Label>
-                        <Input id="email" type="email" defaultValue="user@example.com" />
+                        <Input 
+                          id="email" 
+                          type="email" 
+                          value={personalInfo.email}
+                          onChange={(e) => handlePersonalInfoChange('email', e.target.value)}
+                        />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="phone">Phone</Label>
-                        <Input id="phone" defaultValue="+91 9876543210" />
+                        <Input 
+                          id="phone" 
+                          value={personalInfo.phone}
+                          onChange={(e) => handlePersonalInfoChange('phone', e.target.value)}
+                        />
                       </div>
-                      <Button className="w-full">Save Changes</Button>
+                      <Button 
+                        className="w-full"
+                        onClick={savePersonalInfo}
+                      >
+                        Save Changes
+                      </Button>
                     </div>
                   </TabsContent>
                   <TabsContent value="address" className="p-4 border rounded-md mt-4">
                     <div className="space-y-4">
                       <div className="space-y-2">
                         <Label htmlFor="address1">Address Line 1</Label>
-                        <Input id="address1" defaultValue="123 Milk Street" />
+                        <Input 
+                          id="address1" 
+                          value={address.address1}
+                          onChange={(e) => handleAddressChange('address1', e.target.value)}
+                        />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="address2">Address Line 2</Label>
-                        <Input id="address2" defaultValue="Apartment 4B" />
+                        <Input 
+                          id="address2" 
+                          value={address.address2}
+                          onChange={(e) => handleAddressChange('address2', e.target.value)}
+                        />
                       </div>
                       <div className="grid grid-cols-3 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="city">City</Label>
-                          <Input id="city" defaultValue="Mumbai" />
+                          <Input 
+                            id="city" 
+                            value={address.city}
+                            onChange={(e) => handleAddressChange('city', e.target.value)}
+                          />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="state">State</Label>
-                          <Input id="state" defaultValue="Maharashtra" />
+                          <Input 
+                            id="state" 
+                            value={address.state}
+                            onChange={(e) => handleAddressChange('state', e.target.value)}
+                          />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="pin">PIN Code</Label>
-                          <Input id="pin" defaultValue="400001" />
+                          <Input 
+                            id="pin" 
+                            value={address.pin}
+                            onChange={(e) => handleAddressChange('pin', e.target.value)}
+                          />
                         </div>
                       </div>
-                      <Button className="w-full">Save Address</Button>
+                      <Button 
+                        className="w-full"
+                        onClick={saveAddress}
+                      >
+                        Save Address
+                      </Button>
                     </div>
                   </TabsContent>
                 </Tabs>

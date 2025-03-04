@@ -1,12 +1,12 @@
 
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/providers/KeycloakProvider';
 import UserProfile from '@/components/UserProfile';
 import OneMilkLogo from '@/components/OneMilkLogo';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ShoppingCart } from 'lucide-react';
 import { Button } from './ui/button';
 
 interface LayoutProps {
@@ -15,8 +15,44 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { pathname } = useLocation();
-  const { isLoading } = useAuth();
+  const { isLoading, username, walletBalance } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [cartItems, setCartItems] = useState<any[]>([]);
+  
+  // Load cart items on component mount
+  useEffect(() => {
+    const savedCart = localStorage.getItem('cart_items');
+    if (savedCart) {
+      try {
+        const parsedCart = JSON.parse(savedCart);
+        setCartItems(parsedCart);
+      } catch (e) {
+        console.error('Error parsing saved cart:', e);
+      }
+    }
+    
+    // Check for cart changes
+    const handleStorageChange = () => {
+      const updatedCart = localStorage.getItem('cart_items');
+      if (updatedCart) {
+        try {
+          setCartItems(JSON.parse(updatedCart));
+        } catch (e) {
+          console.error('Error parsing updated cart:', e);
+        }
+      } else {
+        setCartItems([]);
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    document.addEventListener('click', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      document.removeEventListener('click', handleStorageChange);
+    };
+  }, []);
 
   if (isLoading) {
     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
@@ -71,6 +107,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </Link>
             </div>
           </nav>
+          
+          {/* Cart button */}
+          <div className="hidden md:flex mr-4">
+            <Link to="/products" className="relative inline-flex items-center">
+              <ShoppingCart className="h-5 w-5 text-foreground/60" />
+              {cartItems.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-startwell-purple text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartItems.length}
+                </span>
+              )}
+            </Link>
+          </div>
           
           <div className="ml-auto hidden md:block">
             <UserProfile />

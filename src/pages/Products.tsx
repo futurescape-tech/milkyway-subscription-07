@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
@@ -112,6 +113,37 @@ const Products = () => {
   const [deliveryTime, setDeliveryTime] = useState("morning");
   const [deliveryAddress, setDeliveryAddress] = useState("");
 
+  // Load cart from localStorage on component mount
+  useEffect(() => {
+    const savedCart = localStorage.getItem('cart_items');
+    if (savedCart) {
+      try {
+        setCartItems(JSON.parse(savedCart));
+      } catch (e) {
+        console.error('Error parsing saved cart:', e);
+      }
+    }
+
+    const savedFavorites = localStorage.getItem('favorite_products');
+    if (savedFavorites) {
+      try {
+        setFavorites(JSON.parse(savedFavorites));
+      } catch (e) {
+        console.error('Error parsing saved favorites:', e);
+      }
+    }
+  }, []);
+
+  // Save cart to localStorage when it changes
+  useEffect(() => {
+    localStorage.setItem('cart_items', JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  // Save favorites to localStorage when they change
+  useEffect(() => {
+    localStorage.setItem('favorite_products', JSON.stringify(favorites));
+  }, [favorites]);
+
   // Filter products by category
   const filterProducts = (category: string) => {
     setSelectedCategory(category);
@@ -200,6 +232,9 @@ const Products = () => {
     setCartItems([]);
     setShowCheckout(false);
     setShowCart(false);
+    
+    // Clear the cart in localStorage
+    localStorage.removeItem('cart_items');
   };
 
   // Format price in INR
@@ -215,7 +250,23 @@ const Products = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="container mx-auto py-6 px-4">
-        <h1 className="text-4xl font-bold mb-8 text-center">Our Milk Products</h1>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-4xl font-bold text-startwell-purple">Our Milk Products</h1>
+          
+          <Button 
+            variant="outline"
+            className="relative"
+            onClick={() => setShowCart(true)}
+          >
+            <ShoppingCart className="h-5 w-5 mr-2" />
+            <span>Cart</span>
+            {cartItems.length > 0 && (
+              <span className="absolute -top-2 -right-2 bg-startwell-purple text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                {cartItems.length}
+              </span>
+            )}
+          </Button>
+        </div>
         
         <div className="mb-8 flex flex-wrap justify-center gap-2">
           <Button 
@@ -282,9 +333,9 @@ const Products = () => {
                   />
                 </Button>
                 {product.isPopular && (
-                  <Badge className="absolute top-2 left-2" variant="secondary">
+                  <div className="absolute top-2 left-2 px-3 py-1 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-startwell-orange to-startwell-purple animate-pulse">
                     Popular
-                  </Badge>
+                  </div>
                 )}
               </div>
               <CardHeader>
@@ -294,16 +345,23 @@ const Products = () => {
               <CardContent className="pb-0">
                 <p>{product.description}</p>
                 <div className="flex items-center mt-3 text-green-600">
-                  <ShieldCheck className="h-4 w-4 mr-1" />
-                  <span className="text-xs font-medium">Quality Guaranteed</span>
+                  <ShieldCheck className="h-4 w-4 mr-1 text-green-600" />
+                  <span className="text-xs font-medium text-green-600">Quality Guaranteed</span>
                 </div>
               </CardContent>
               <CardFooter className="flex flex-col sm:flex-row gap-3 justify-between mt-4">
-                <Button variant="outline" onClick={() => addToCart(product)}>
+                <Button 
+                  variant="outline" 
+                  className="w-full sm:w-auto flex-1 sm:flex-initial"
+                  onClick={() => addToCart(product)}
+                >
                   <ShoppingCart className="mr-2 h-4 w-4" />
                   Add to Cart
                 </Button>
-                <Button asChild>
+                <Button 
+                  className="w-full sm:w-auto flex-1 sm:flex-initial"
+                  asChild
+                >
                   <Link to={`/products/${product.id}`}>View Details</Link>
                 </Button>
               </CardFooter>
