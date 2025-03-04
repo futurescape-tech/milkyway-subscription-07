@@ -1,7 +1,7 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/providers/KeycloakProvider';
+import { supabase } from '@/services/supabase';
 import {
   LogOut,
   ShoppingCart,
@@ -481,11 +481,9 @@ const UserProfile = () => {
                     <div className="mt-3 flex justify-between items-center">
                       <span className="font-semibold">Monthly Price: ₹{subscription.price}</span>
                       <div className="space-x-2">
-                        <Button variant="outline" size="sm">Upgrade</Button>
                         <Button 
                           variant="outline" 
                           size="sm" 
-                          className={subscription.status === 'Active' ? 'text-yellow-600' : 'text-green-600'}
                           onClick={() => {
                             const updatedSubscriptions = subscriptions.map(sub => 
                               sub.id === subscription.id 

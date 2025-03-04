@@ -1,6 +1,8 @@
 
-import React, { useState, useEffect, ReactNode } from 'react';
-import { isAuthenticated, logout, getUsername, getToken, refreshSession } from '../services/supabase';
+import React, { useState, useEffect, ReactNode, useCallback } from 'react';
+import { Session } from '@supabase/supabase-js';
+import { supabase, getUserProfile } from '../services/supabase';
+import { toast } from 'sonner';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -17,12 +19,14 @@ export interface AuthContextType {
   refresh: () => Promise<boolean>;
   walletBalance: number;
   addToWallet: (amount: number) => void;
+  firstName: string | undefined;
 }
 
 export const AuthContext = React.createContext<AuthContextType>({
   isAuthenticated: false,
   isLoading: true,
   username: undefined,
+  firstName: undefined,
   login: () => {},
   logout: () => {},
   token: undefined,
@@ -35,21 +39,55 @@ export const AuthContext = React.createContext<AuthContextType>({
 export const KeycloakProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [authenticated, setAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [session, setSession] = useState<Session | null>(null);
+  const [profile, setProfile] = useState<any>(null);
   const [walletBalance, setWalletBalance] = useState(() => {
     const savedBalance = localStorage.getItem('wallet_balance');
     return savedBalance ? parseFloat(savedBalance) : 0;
   });
 
-  const checkAuth = async () => {
-    const isAuth = isAuthenticated();
-    setAuthenticated(isAuth);
-    setIsLoading(false);
-    return isAuth;
-  };
+  const fetchUserProfile = useCallback(async () => {
+    const userProfile = await getUserProfile();
+    if (userProfile) {
+      setProfile(userProfile);
+    }
+  }, []);
 
   useEffect(() => {
-    checkAuth();
-  }, []);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, newSession) => {
+        setSession(newSession);
+        setAuthenticated(!!newSession);
+        
+        if (newSession) {
+          await fetchUserProfile();
+        } else {
+          setProfile(null);
+        }
+        
+        setIsLoading(false);
+      }
+    );
+
+    // Initial session check
+    const checkSession = async () => {
+      const { data: { session: initialSession } } = await supabase.auth.getSession();
+      setSession(initialSession);
+      setAuthenticated(!!initialSession);
+      
+      if (initialSession) {
+        await fetchUserProfile();
+      }
+      
+      setIsLoading(false);
+    };
+    
+    checkSession();
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [fetchUserProfile]);
 
   // Save wallet balance to localStorage whenever it changes
   useEffect(() => {
@@ -65,9 +103,15 @@ export const KeycloakProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const refresh = async () => {
     try {
-      const result = await refreshSession();
-      setAuthenticated(result);
-      return result;
+      const { data: { session: refreshedSession } } = await supabase.auth.getSession();
+      setSession(refreshedSession);
+      setAuthenticated(!!refreshedSession);
+      
+      if (refreshedSession) {
+        await fetchUserProfile();
+      }
+      
+      return !!refreshedSession;
     } catch (error) {
       console.error('Failed to refresh authentication', error);
       return false;
@@ -77,10 +121,17 @@ export const KeycloakProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const contextValue: AuthContextType = {
     isAuthenticated: authenticated,
     isLoading,
-    username: getUsername(),
+    username: profile?.display_name || session?.user?.email,
+    firstName: profile?.first_name,
     login: () => {}, // This is handled in the Login component
-    logout: () => logout(),
-    token: getToken(),
+    logout: async () => {
+      await supabase.auth.signOut();
+      setAuthenticated(false);
+      setSession(null);
+      setProfile(null);
+      window.location.href = '/login';
+    },
+    token: session?.access_token,
     hasRole: () => true, // Simplified role check
     refresh,
     walletBalance,
