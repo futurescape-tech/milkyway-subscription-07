@@ -49,7 +49,7 @@ const Products = () => {
       name: "Organic Milk",
       description: "Certified organic milk from free-range, grass-fed cows.",
       price: 450,
-      image: "public/lovable-uploads/dfa6299d-8442-4025-a976-3edab27f24b6.png",
+      image: "/lovable-uploads/dfa6299d-8442-4025-a976-3edab27f24b6.png",
       category: "organic",
       isPopular: true
     },
@@ -74,7 +74,7 @@ const Products = () => {
       name: "Chocolate Milk",
       description: "Delicious chocolate-flavored milk, perfect for a treat.",
       price: 320,
-      image: "public/lovable-uploads/053e3dbc-e1f3-451e-8e6b-cb42d26cb4d2.png",
+      image: "/lovable-uploads/053e3dbc-e1f3-451e-8e6b-cb42d26cb4d2.png",
       category: "flavored"
     },
     {
@@ -91,7 +91,7 @@ const Products = () => {
       name: "Fresh Paneer",
       description: "Homemade soft and tender paneer made from whole milk.",
       price: 399,
-      image: "public/lovable-uploads/8a14069f-517c-49ed-ba98-18b0c5030010.png",
+      image: "/lovable-uploads/8a14069f-517c-49ed-ba98-18b0c5030010.png",
       category: "dairy-products"
     },
     {

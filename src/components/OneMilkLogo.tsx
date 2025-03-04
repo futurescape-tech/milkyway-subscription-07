@@ -18,7 +18,7 @@ const OneMilkLogo: React.FC<LogoProps> = ({ className = "", withText = true }) =
         <div className="ml-2 font-medium text-xl flex items-center tracking-tight">
           <span className="text-startwell-purple">start</span>
           <span className="text-startwell-orange">well</span>
-          <span className="ml-1 text-startwell-yellow">milk</span>
+          <span className="ml-1 text-startwell-yellow">dairy</span>
         </div>
       )}
     </div>
