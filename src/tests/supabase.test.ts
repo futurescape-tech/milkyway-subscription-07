@@ -1,15 +1,14 @@
 
-// This file contains tests for Supabase integration
-// You'll need to set up a test runner like Jest or Vitest to run these tests
-
+// This file contains tests for Supabase integration using Vitest
+import { describe, test, expect, vi } from 'vitest';
 import { supabase, login, register, isAuthenticated } from '@/services/supabase';
 
 // Mock the toast function
-jest.mock('sonner', () => ({
+vi.mock('sonner', () => ({
   toast: {
-    error: jest.fn(),
-    success: jest.fn(),
-    info: jest.fn(),
+    error: vi.fn(),
+    success: vi.fn(),
+    info: vi.fn(),
   },
 }));
 

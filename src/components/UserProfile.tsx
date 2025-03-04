@@ -44,7 +44,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import OneMilkLogo from './OneMilkLogo';
 
-const UserProfile = () => {
+interface UserProfileProps {
+  firstName?: string;
+}
+
+const UserProfile: React.FC<UserProfileProps> = ({ firstName: initialFirstName }) => {
   const { username, logout, walletBalance, addToWallet } = useAuth();
   const [activeDialog, setActiveDialog] = useState<string | null>(null);
   const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
@@ -53,7 +57,7 @@ const UserProfile = () => {
   
   // Personal Information states
   const [personalInfo, setPersonalInfo] = useState({
-    firstName: username?.split(' ')[0] || '',
+    firstName: initialFirstName || username?.split(' ')[0] || '',
     lastName: username?.split(' ')[1] || '',
     email: 'user@example.com',
     phone: '+91 9876543210'
