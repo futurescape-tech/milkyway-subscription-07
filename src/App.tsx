@@ -75,6 +75,14 @@ const App = ({ basePath = '' }: AppProps) => {
       })
       .subscribe();
 
+    // Debug auth state at load time
+    const checkAuth = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      console.log("Initial auth check:", { data, error });
+    };
+    
+    checkAuth();
+
     // Clean up subscription on unmount
     return () => {
       supabase.removeChannel(profilesChannel);
@@ -90,6 +98,8 @@ const App = ({ basePath = '' }: AppProps) => {
           <BrowserRouter basename={basePath}>
             <Routes>
               <Route path="/login" element={<Login />} />
+              
+              {/* Development or production routes */}
               <Route path="/" element={
                 <ProtectedRoute>
                   <Layout>

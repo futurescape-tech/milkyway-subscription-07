@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/providers/KeycloakProvider';
 import { supabase } from '@/services/supabase';
+import { toast } from 'sonner';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -28,6 +29,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
       } catch (error) {
         console.error("Auth check error:", error);
         setAuthorized(false);
+        toast.error("Authentication error. Please try logging in again.");
       } finally {
         setChecking(false);
       }
@@ -43,11 +45,19 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     }
   }, [isLoading, isAuthenticated, refresh]);
 
+  // For development purposes, we'll bypass authentication if in development mode
+  // This allows you to see the app without being authenticated
+  if (import.meta.env.DEV) {
+    console.log("Development mode: bypassing authentication");
+    return <>{children}</>;
+  }
+
   if (isLoading || checking) {
-    // You can show a loading spinner here if needed
+    // Show loading spinner with a message
     return (
-      <div className="h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
+      <div className="h-screen flex flex-col items-center justify-center">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mb-4"></div>
+        <p className="text-gray-600">Loading application...</p>
       </div>
     );
   }
